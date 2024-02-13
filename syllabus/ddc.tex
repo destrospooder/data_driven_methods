@@ -1,0 +1,92 @@
+\documentclass{article}
+\usepackage[papersize={8.5in,11in}, margin=0.75in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{setspace}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{physics}
+\usepackage{fancyhdr}
+\usepackage{ragged2e}
+\usepackage[none]{hyphenat}%%%%
+\usepackage[scr]{rsfso}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{tikz}
+
+\ExplSyntaxOn
+\NewDocumentCommand{\optional}{mO{#3}m}
+ {% #1 is a sectioning command
+  % save the current meaning of \the<level>
+  \cs_set_eq:Nc \__optional_save: { the \cs_to_str:N #1 }
+  % add \advancemarker
+  \cs_set:cpn { the \cs_to_str:N #1 } { \__optional_save: \optionalmarker }
+  \bool_set_true:N \__optional_killwidth_bool
+  #1[#2]{#3}
+  \bool_set_false:N \__optional_killwidth_bool
+  % reset \the<level> to the previous meaning
+  \cs_set_eq:cN { the \cs_to_str:N #1 } \__optional_save:
+ }
+\NewDocumentCommand{\optionalmarker}{}
+ {
+  \bool_if:NTF \__optional_killwidth_bool { \makebox[0pt][l]{*} } { * }
+ }
+
+\bool_new:N \__optional_killwidth_bool
+
+\AddToHook{cmd/@starttoc/begin}{\bool_set_true:N \__optional_killwidth_bool}
+\ExplSyntaxOff
+
+\hypersetup{
+    colorlinks=true, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=blue,  %choose some color if you want links to stand out
+}
+
+\usetikzlibrary{positioning}
+
+\addtolength{\topmargin}{.5in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{The Cooper Union \\Albert Nerken School of Engineerng}
+\fancyhead[R]{Benjamin Aziel  \\Last Updated: November 4, 2023}
+\cfoot{\thepage}
+
+\newcommand{\Laplace}{\mathscr{L}}
+\newcommand{\UnitStep}{\mathscr{U}}
+\newcommand{\Integer}{\mathbb{Z}}
+\newcommand{\Natural}{\mathbb{N}}
+\newcommand{\Volume}{{\ooalign{\hfil$V$\hfil\cr\kern0.08em--\hfil\cr}}}
+
+\newcommand{\bicture}[1]{
+\begin{center}
+    {\includegraphics[height=4cm]{#1}}
+\end{center}}
+
+\begin{document}
+\begin{onehalfspacing}
+\begin{flushleft}
+
+\vspace{-0.3in}
+\large{\textbf{ME493 - Methods of Data-Driven Control (Proposal)}} \\
+\large{Spring 2024}
+
+\normalsize
+\vspace{.2in}
+
+
+
+\textbf{Course Description:} A survey course
+
+\vspace{.1in}
+
+\textbf{Prerequisite:} ME351 - Feedback Control Systems
+
+\textbf{Prerequisite(s):} ME351: Feedback Control Systems
+
+
+\end{flushleft}
+\end{onehalfspacing}
+\end{document}
