@@ -60,7 +60,7 @@ for k = 1:6
     caxis([-MM MM]);
     colorbar;
 end
-sgtitle('ux spatial modes')
+sgtitle('ux spatial modes');
 
 figure;
 for k = 1:6
@@ -69,13 +69,13 @@ for k = 1:6
     caxis([-MM MM]);
     colorbar;
 end
-sgtitle('uy spatial modes')
+sgtitle('uy spatial modes');
 
 %%
 figure;
 for k = 1:6
     subplot(2, 3, k);
-    plot(t_field, SV(k)*V(:, k))
-    hold on
+    plot(t_field, SV(k)*V(:, k));
+    hold on;
 end
-sgtitle(['temporal amplitudes'])
+sgtitle(['temporal amplitudes']);
