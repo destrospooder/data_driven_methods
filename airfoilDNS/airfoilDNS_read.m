@@ -2,7 +2,7 @@
 clear; clc;
 
 % directory where data is stored
-DIR = './data';
+DIR = '';
 
 paramsFile = fullfile(DIR,'airfoilDNS_parameters.h5');
 
@@ -12,7 +12,7 @@ Re = h5read(paramsFile,'/Re');
 FreqsAll = h5read(paramsFile,'/frequencies'); % pitching frequencies
 alpha_p = h5read(paramsFile,'/alpha_p'); % pitching amplitude (deg)
 alpha_0s = h5read(paramsFile,'/alpha_0s'); % base angles of attack (deg) (25 and 30)
-pich_axis = h5read(paramsFile,'/pitch_axis'); % 0.5, midchord pitching
+pitch_axis = h5read(paramsFile,'/pitch_axis'); % 0.5, midchord pitching
 
 %h5disp(paramsFile)
 
@@ -20,9 +20,9 @@ pich_axis = h5read(paramsFile,'/pitch_axis'); % 0.5, midchord pitching
 % load and plot snapshots for various airfoil kinematics
 % each simulation contains 401 snapshots, with uniform timestep of 0.1 c/U_\infty time units
 
-BaseAngle = 30; % options are 25 and 30 deg
+BaseAngle = 25; % options are 25 and 30 deg
 
-Freqs = [0.05,0.25,0.5]; % choose pitching frequencies to plot
+Freqs = [0.05]; % choose pitching frequencies to plot
 % must be from the set 0.05, 0.1, 0.2, 0.25, 0.3, 0.35, 0.4, 0.5
 
 FreqLabels = {'0p05','0p25','0p5'}; % for loading files, must match selected Freqs
@@ -155,7 +155,11 @@ for ii = 1:4
     
     subplot(4,1,ii)
     % for velocity form
-    [cv,ch] = contourf(x,y,transpose(reshape(real(Phi(end/2+1:end,modeInd)),nx,ny)),MM*v);
+    [cv,ch] = contourf( ...
+        x, ...
+        y, ...
+        transpose(reshape(real(Phi(end/2+1:end,modeInd)),nx,ny)), ...
+        MM*v);
     caxis([-MM MM]);
     set(gca,'fontsize',14)
     title(['$f = ',num2str(abs(imag(Eigscts(modeInd)))/(2*pi)),'$'],'interpreter','latex','fontsize',22)
