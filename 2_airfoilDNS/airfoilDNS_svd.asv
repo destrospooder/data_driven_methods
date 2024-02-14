@@ -79,3 +79,47 @@ for k = 1:6
     hold on
 end
 sgtitle(['temporal amplitudes'])
+
+%%
+
+% Swiped videomaking code from Eunkyu (Q) Kim in exchange for my snapshot
+% code :)
+file_name = 'ux_flow_svd.avi';
+v = VideoWriter(file_name, 'Uncompressed AVI');
+v.FrameRate = 15;
+open(v);
+
+% Loop through each time step
+for t = 1:nt
+    % Create a new figure for each frame to ensure consistent sizing
+    fig = figure('Units', 'pixels', 'Position', [100, 100, 1920, 1080], 'Visible', 'off');
+
+    % Original flow plot
+    subplot(1, 4, 1);
+    imagesc(x, y, squeeze(ux(:,:,t))');
+    axis equal tight;
+    title('Original Flow');
+    colorbar;
+
+    % Ranks for reconstruction
+    ranks = [2, 4, 6];
+
+    for i = 1:length(ranks)
+        r = ranks(i);
+        % Reconstruct flow using the first 'r' modes
+        X_approx = U(:,1:r) * S(1:r,1:r) * V(:,1:r)' + repmat(X_mean, 1, nt); % Add back the mean
+        u
+    end
+
+    drawnow;
+
+    % Capture and write frame
+    frame = getframe(fig);
+    writeVideo(v, frame);
+
+    % Close the figure to free up memory
+    close(fig);
+end
+
+close(v);
+
