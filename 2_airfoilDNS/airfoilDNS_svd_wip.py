@@ -46,17 +46,22 @@ except FileNotFoundError:
     print("SVD components stored for future use.")
 
 # Plotting squared singular values
-"""plt.semilogy(np.arange(len(S)-1), np.square(S[:-1]), 'o')
+plt.semilogy(np.arange(len(S)-1), np.square(S[:-1]), 'o')
 plt.xlabel('Index')
 plt.ylabel('Squared Singular Values')
-plt.show()"""
+plt.show()
 
 # Spatial modes
+x_axis = np.linspace(0, np.max(np.shape(ux_reshaped)), np.max(np.shape(ux_reshaped)))
+plt.plot(x_axis, U[range(1, len(x_axis) + 1), 0])
+plt.show()
+
+"""
 midpoint = U.shape[0] // 2
 U_ux = U[:midpoint, :]
 U_uy = U[midpoint:, :]
 
-"""fig, axes = plt.subplots(3, 2, figsize=(12, 8))
+fig, axes = plt.subplots(3, 2, figsize=(12, 8))
 
 for i in range(6):
     row, col = i // 2, i % 2
@@ -67,7 +72,6 @@ for i in range(6):
     ax.set_title(f'U_ux[{i}]')
 
 plt.tight_layout()
-plt.show()
 
 fig, axes = plt.subplots(3, 2, figsize=(12, 8))
 
@@ -80,14 +84,15 @@ for i in range(6):
     ax.set_title(f'U_uy[{i}]')
 
 plt.tight_layout()
-plt.show()"""
+plt.show()
 
 MM = 0.01
 v = np.arange(-1, 1.1, 0.1)
 
-data = np.transpose(U_uy[:, 5].reshape(nx, ny, order = 'F'))
+data = np.transpose(U_ux[:, 0].reshape(nx, ny, order = 'F').copy())
 xv, yv = np.meshgrid(x, y)
 
 plt.contourf(xv, yv, data, MM * v)
 plt.colorbar()
 plt.show()
+"""
