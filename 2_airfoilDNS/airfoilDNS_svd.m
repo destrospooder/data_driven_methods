@@ -1,4 +1,11 @@
-% i'll migrate this to py eventually
+%{
+
+ME493 - Methods of Data-Driven Control
+POD analysis of Low-Reynolds-number pitching airfoil 
+    direct numerical simulations
+Benjamin Aziel
+
+%}
 
 clear; clc;
 
@@ -21,6 +28,9 @@ ux_reshaped = reshape(ux, nx * ny, nt);
 uy = h5read(data_file, '/uy');
 uy_reshaped = reshape(uy, nx * ny, nt);
 
+xa = h5read(data_file, '/xa');
+ya = h5read(data_file, '/ya');
+
 X = [ux_reshaped; uy_reshaped];
 
 if mean_correction
@@ -31,7 +41,7 @@ end
 [U, S, V] = svd(X, 'econ');
 
 %% 
-SV = diag(S)
+SV = diag(S);
 
 figure;
 semilogy(linspace(1, length(S), length(S)), SV.^2, linewidth = 2);
@@ -45,7 +55,6 @@ xlabel('Indices');
 ylabel('Squared Singular Values');
 title('Squared SVs - First 400')
 
-%%
 U_ux = U(1:length(ux_reshaped), :);
 U_uy = U(length(uy_reshaped)+1:end, :);
 
@@ -53,6 +62,7 @@ MM = 0.01;
 v = -1:0.1:1;
 v(11)=[];
 
+%%
 figure;
 for k = 1:6
     subplot(2, 3, k);
@@ -71,7 +81,7 @@ for k = 1:6
 end
 sgtitle('uy spatial modes');
 
-%%
+
 figure;
 for k = 1:6
     subplot(2, 3, k);
@@ -79,3 +89,17 @@ for k = 1:6
     hold on;
 end
 sgtitle(['temporal amplitudes']);
+
+%%
+
+% Let's attempt reconstruction for rank r
+r = 125;
+X_approx = U(:, 1:r) * S(1:r, 1:r) * V(:, 1:r)';
+
+t_star = 200; % timestep of interest (max 401)
+ux_approx = reshape(X_approx(1:nx*ny, t_star), nx, ny);
+
+figure;
+contourf(x, y, ux_approx', linspace(-0.4, 0.2, 120));
+caxis;
+colorbar;
