@@ -51,10 +51,20 @@ V = np.transpose(Vh)
 SV = np.diag(S)
 
 # Plotting squared singular values
-plt.semilogy(np.arange(len(S) - 1), np.square(S[: - 1]), 'o')
+plt.semilogy(np.arange(len(S) - 1), np.square(S[:-1]), 'o')
 plt.xlabel('Index')
 plt.ylabel('Squared Singular Values')
 plt.suptitle("squared sv's", fontsize = 12)
+plt.savefig('pod_analysis_figs/squared_sv.png')
+plt.show()
+
+# There's a pretty noticeable elbow around r = 16 so let's plot those in particular
+plt.stem(np.arange(16), np.square(S[:16]), 'o')
+plt.xlabel('Index')
+plt.ylabel('Squared Singular Values')
+plt.suptitle("first 16 squared sv's", fontsize = 12)
+plt.semilogy()
+plt.savefig('pod_analysis_figs/squared_sv_truncated.png')
 plt.show()
 
 U_ux = U[0:len(ux_reshaped), :]
@@ -74,6 +84,7 @@ for k in range(6):
 
 fig.suptitle("ux spatial modes", fontsize = 12)
 plt.tight_layout()
+plt.savefig('pod_analysis_figs/ux_spatial_modes.png')
 plt.show()
 
 # uy spatial modes
@@ -88,6 +99,7 @@ for k in range(6):
 
 fig.suptitle("uy spatial modes", fontsize = 12)
 plt.tight_layout()
+plt.savefig('pod_analysis_figs/uy_spatial_modes.png')
 plt.show()
 
 # temporal amplitudes
@@ -99,6 +111,7 @@ for k in range(6):
 
 fig.suptitle("temporal amplitudes", fontsize = 12)
 plt.tight_layout()
+plt.savefig('pod_analysis_figs/temporal_amplitudes.png')
 plt.show()
 
 # reconstruction for rank 4
@@ -129,6 +142,7 @@ for k in range(6):
 
 fig.suptitle("ux reconstruction - rank 4", fontsize = 12)
 plt.tight_layout()
+plt.savefig('pod_analysis_figs/ux_reconstruction.png')
 plt.show()
 
 # uy reconstruction
@@ -155,6 +169,7 @@ for k in range(6):
 
 fig.suptitle("uy reconstruction - rank 4", fontsize = 12)
 plt.tight_layout()
+plt.savefig('pod_analysis_figs/uy_reconstruction.png')
 plt.show()
 
 # for debugging
