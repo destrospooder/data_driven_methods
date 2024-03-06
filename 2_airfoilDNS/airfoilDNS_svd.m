@@ -110,7 +110,7 @@ end
 plot(xa(:,:),ya(:,:),'k-')  % plot all airfoil locations
 sgtitle(['ux reconstruction - rank 4']);
 
-figure;
+figure;+
 for k = 1:length(t_star)
     subplot(2, 3, k);
     uy_approx = reshape(X_approx(nx*ny+1:end, t_star(k)), nx, ny);
@@ -141,13 +141,32 @@ xlim([-0.02 1.5]);
 ylim([0 1.2]);
 xlabel('Frequency'), ylabel('DMD mode amplitude (scaled)');
 
+
+%%
+
+figure;
+for k = 1:6
+    subplot(2, 3, k);
+    plot(t_field(1:400), Phi(k, :));
+    hold on;
+end
+sgtitle(['modes of ux / dmd']);
+
+figure;
+for k = 1:6
+    subplot(2, 3, k);
+    plot(t_field(1:400), Phi(k + nx * ny, :));
+    hold on;
+end
+sgtitle(['modes of uy / dmd']);
+
 %%
 % SINDy time!
 
 temp_amps = [V(:, 1:6) * S(1:6, 1:6)]; % x
 t_field; % t
 
-dtemp_amps = diff(temp_amps);
+dtemp_amps = diff(temp_amps) / dt_field;
 dtemp_amps = vertcat(dtemp_amps, dtemp_amps(400, :)); % to fill it out
 
 polyorder = 2;
@@ -164,4 +183,3 @@ syms aleph
 plot(t_field - 50, SV(1)*V(:, 1))
 xlim([0 40])
 hold on
-fplot(0.0347/2 * aleph^2)

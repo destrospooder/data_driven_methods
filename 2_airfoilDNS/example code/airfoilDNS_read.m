@@ -1,5 +1,5 @@
 % Clear workspace
-clear; clc;
+% clear; clc;
 
 % directory where data is stored
 DIR = '';
