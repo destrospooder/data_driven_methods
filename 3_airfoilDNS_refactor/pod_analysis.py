@@ -1,31 +1,16 @@
-import h5py
+#!/bin/env python
+
 import numpy as np
 import matplotlib.pyplot as plt
-
-grid_file = h5py.File('dataset/airfoilDNS_grid.h5', 'r+')
-data_file = h5py.File('dataset/airfoilDNS_a25f0p05.h5', 'r+')
+from var_import import *
 
 mean_correction = True
 
-x = np.squeeze(grid_file['x'][()])
-y = np.squeeze(grid_file['y'][()])
-nx = len(x)
-ny = len(y)
-
-t_field = np.squeeze(data_file['t_field'][()])
-t_force = np.squeeze(data_file['t_force'][()])
-nt = len(t_field)
-
-ux = np.squeeze(data_file['ux'][()]) # streamwise velocity
 ux_reshaped = np.transpose(ux) # pains translating matlab to py code
 ux_reshaped = ux_reshaped.reshape(nx * ny, nt, order = 'F')
 
-uy = np.squeeze(data_file['uy'][()]) # transverse velocity
 uy_reshaped = np.transpose(uy) # pains translating matlab to py code
 uy_reshaped = uy_reshaped.reshape(nx * ny, nt, order = 'F')
-
-xa = np.squeeze(data_file['xa'][()])
-ya = np.squeeze(data_file['ya'][()])
 
 X = np.vstack([ux_reshaped, uy_reshaped])
 
