@@ -2,8 +2,8 @@ import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 
-grid_file = h5py.File('airfoilDNS_grid.h5', 'r+')
-data_file = h5py.File('airfoilDNS_a25f0p05.h5', 'r+')
+grid_file = h5py.File('dataset/airfoilDNS_grid.h5', 'r+')
+data_file = h5py.File('dataset/airfoilDNS_a25f0p05.h5', 'r+')
 
 mean_correction = True
 
@@ -171,7 +171,3 @@ fig.suptitle("uy reconstruction - rank 4", fontsize = 12)
 plt.tight_layout()
 plt.savefig('pod_analysis_figs/uy_reconstruction.png')
 plt.show()
-
-# for debugging
-print('heeheeheehaw')
-print('hoohaahaahaa')
