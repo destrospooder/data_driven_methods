@@ -34,7 +34,7 @@ if mean_correction:
     X_mean_temp = np.transpose(X_mean) # pains translating matlab to py code
     X = X - np.reshape(X_mean_temp, (len(X_mean_temp), 1)) * np.ones([1, nt])
 
-# storage is cheaper than compute
+# storage is cheaper than compute :)
 try:
     U = np.load('svd_store/svdeez_u.npy')
     S = np.load('svd_store/svdeez_s.npy')
@@ -48,7 +48,7 @@ except FileNotFoundError:
     print("SVD components stored for future use.")
 
 V = np.transpose(Vh)
-SV = np.diag(S)
+SV = np.diag(S) # singular value matrix, as opposed to the vector from np.linalg.svd
 
 # Plotting squared singular values
 plt.semilogy(np.arange(len(S) - 1), np.square(S[:-1]), 'o')
@@ -66,6 +66,8 @@ plt.suptitle("first 16 squared sv's", fontsize = 12)
 plt.semilogy()
 plt.savefig('pod_analysis_figs/squared_sv_truncated.png')
 plt.show()
+
+# note that they're coming in "pairs" - indicative of oscillatory behavior
 
 U_ux = U[0:len(ux_reshaped), :]
 U_uy = U[len(uy_reshaped):, :]
@@ -113,6 +115,7 @@ fig.suptitle("temporal amplitudes", fontsize = 12)
 plt.tight_layout()
 plt.savefig('pod_analysis_figs/temporal_amplitudes.png')
 plt.show()
+# we use the temporal amplitudes to determine which timesteps to capture in reconstruction to get a good gauge of what the flow looks like
 
 # reconstruction for rank 4
 r = 4
