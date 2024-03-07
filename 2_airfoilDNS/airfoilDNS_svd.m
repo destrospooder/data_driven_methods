@@ -110,7 +110,7 @@ end
 plot(xa(:,:),ya(:,:),'k-')  % plot all airfoil locations
 sgtitle(['ux reconstruction - rank 4']);
 
-figure;+
+figure;
 for k = 1:length(t_star)
     subplot(2, 3, k);
     uy_approx = reshape(X_approx(nx*ny+1:end, t_star(k)), nx, ny);
