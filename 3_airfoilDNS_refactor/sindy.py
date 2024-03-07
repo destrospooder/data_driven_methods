@@ -135,6 +135,7 @@ for k in range(6):
     ax.plot(t_field, S[k] * V[:, k], 'r-')
 
 fig.suptitle("sindy-derived temporal amplitudes (lambda = 0.0135) vs. pod temporal amplitudes", fontsize = 12)
+plt.legend(['SINDy (lambda = 0.0135)', 'POD'], bbox_to_anchor=(1.05, 0), loc='lower left')
 plt.tight_layout()
 plt.savefig('sindy_figs/comparison.png')
 plt.show()
