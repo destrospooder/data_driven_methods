@@ -3,7 +3,7 @@
 import numpy as np
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
-from var_import import dt_field
+from var_import import dt_field, t_field
 
 # Doing the manual implementation first using Brunton example code, then I'll learn how to use PySINDy
 
@@ -131,12 +131,10 @@ fig, ax1 = plt.subplots(2, 3, figsize = (12, 6))
 
 for k in range(6):
     ax = ax1.flat[k]
-    ax.plot(sol.t, sol.y[k, :])
-    xticks = ax.get_xticks()
-    xticklabels = [str(int(xtick + 50)) for xtick in xticks]
-    ax.set_xticklabels(xticklabels)
+    ax.plot(sol.t + 50, sol.y[k, :])
+    ax.plot(t_field, S[k] * V[:, k], 'r-')
 
-fig.suptitle("sindy temporal amplitudes", fontsize = 12)
+fig.suptitle("sindy-derived temporal amplitudes (lambda = 0.0135) vs. pod temporal amplitudes", fontsize = 12)
 plt.tight_layout()
-plt.savefig('sindy_figs/sindy_amps.png')
+plt.savefig('sindy_figs/comparison.png')
 plt.show()
