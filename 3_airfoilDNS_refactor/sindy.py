@@ -69,7 +69,7 @@ dtempamps = np.diff(tempamps, axis = 0) / dt_field
 dtempamps = np.vstack([dtempamps, dtempamps[399, :]])
 
 Theta = poolData(tempamps, n_tempamps, 2) # because fluids is a quadratic domain
-sparse_knob = 0.05
+sparse_knob = 0.0140053 # 0.0137401
 Xi = sparsifyDynamics(Theta, dtempamps, sparse_knob, n_tempamps)
 print(Xi)
 
