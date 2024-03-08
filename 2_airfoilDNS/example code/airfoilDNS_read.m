@@ -82,6 +82,7 @@ end
 FreqStr = '0p05';
 Freq = 0.05;
 
+BaseAngle = 25;
 filename = fullfile(DIR,['airfoilDNS_a',num2str(BaseAngle),'f',FreqStr,'.h5']);
 
 Cl = h5read(filename,'/Cl'); % lift coefficient
@@ -130,7 +131,7 @@ if meanSub
     data = data-dataMean*ones(1,nt);
 end
 
-r= 100; % optional truncation of SVD (set to 0 for no truncation)
+r= 16; % optional truncation of SVD (set to 0 for no truncation)
 [Phi, Lambda,Atilde,Amplitudes] = calc_dmd(data,r);
 
 Eigscts = log(Lambda)/dt_field; % find eignevalues in continuous time

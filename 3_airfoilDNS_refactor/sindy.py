@@ -3,7 +3,7 @@
 import numpy as np
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
-from var_import import dt_field, t_field
+from var_import import *
 
 # Doing the manual implementation first using Brunton example code, then I'll learn how to use PySINDy
 
@@ -69,7 +69,7 @@ dtempamps = np.diff(tempamps, axis = 0) / dt_field
 dtempamps = np.vstack([dtempamps, dtempamps[399, :]])
 
 Theta = poolData(tempamps, n_tempamps, 2) # because fluids is a quadratic domain
-sparse_knob = 0.0135
+sparse_knob = 0.05
 Xi = sparsifyDynamics(Theta, dtempamps, sparse_knob, n_tempamps)
 print(Xi)
 
@@ -125,7 +125,6 @@ t = [0, 40]
 t_eval = np.linspace(t[0], t[1], 1000) # just to beef up resolution of solve_ivp
 
 sol = solve_ivp(idd_system, t, x0, t_eval = t_eval)
-print(sol)
 
 fig, ax1 = plt.subplots(2, 3, figsize = (12, 6))
 
@@ -134,8 +133,8 @@ for k in range(6):
     ax.plot(sol.t + 50, sol.y[k, :])
     ax.plot(t_field, S[k] * V[:, k], 'r-')
 
-fig.suptitle("sindy-derived temporal amplitudes (lambda = 0.0135) vs. pod temporal amplitudes", fontsize = 12)
-plt.legend(['SINDy (lambda = 0.0135)', 'POD'], bbox_to_anchor=(1.05, 0), loc='lower left')
+fig.suptitle(f"sindy-derived temporal amplitudes (lambda = {float(sparse_knob)}) vs. pod temporal amplitudes", fontsize = 12)
+plt.legend([f'SINDy (lambda = {float(sparse_knob)})', 'POD'], bbox_to_anchor=(1.05, 0), loc='lower left')
 plt.tight_layout()
 plt.savefig('sindy_figs/comparison.png')
 plt.show()
