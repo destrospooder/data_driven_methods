@@ -4,7 +4,7 @@
 
 Data was sourced from Aaron Towne's [database for reduced-complexity modeling of fluid flows](https://deepblue.lib.umich.edu/data/collections/kk91fk98z). If replication of results is desired, here`s the file tree:
 
-3_airfoilDNS_refactor <br/> 
+`3_airfoilDNS_refactor` <br/> 
  ┣ `dataset` <br/> 
  ┃ ┣ `airfoilDNS_a25f0p05.h5` <br/> 
  ┃ ┣ `airfoilDNS_grid.h5` <br/> 
