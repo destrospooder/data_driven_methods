@@ -97,7 +97,3 @@ fig.suptitle("ux dmd modes", fontsize = 12)
 plt.tight_layout()
 plt.savefig('dmd_analysis_figs/ux_dmd_modes.png')
 plt.show()
-
-
-print('peepeepoopoo')
-print('weeweewoowoo')
