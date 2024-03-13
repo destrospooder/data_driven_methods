@@ -66,10 +66,10 @@ for i in range(n_tempamps):
 
 tempamps = np.transpose(tempamps)
 dtempamps = np.diff(tempamps, axis = 0) / dt_field
-dtempamps = np.vstack([dtempamps, dtempamps[399, :]])
+tempamps = tempamps[:-1]
 
 Theta = poolData(tempamps, n_tempamps, 2) # because fluids is a quadratic domain
-sparse_knob = 0.0140053 # 0.0137401
+sparse_knob = 0.01381478 # 0.0137401
 Xi = sparsifyDynamics(Theta, dtempamps, sparse_knob, n_tempamps)
 print(Xi)
 
@@ -137,4 +137,12 @@ fig.suptitle(f"sindy-derived temporal amplitudes (lambda = {float(sparse_knob)})
 plt.legend([f'SINDy (lambda = {float(sparse_knob)})', 'POD'], bbox_to_anchor=(1.05, 0), loc='lower left')
 plt.tight_layout()
 plt.savefig('sindy_figs/comparison.png')
+plt.show()
+
+fig, ax2 = plt.subplots(2, 3, figsize = (12, 6))
+
+for k in range(6):
+    ax = ax2.flat[k]
+    ax.plot(t_field, dtempamps[:, k], 'r-')
+
 plt.show()
