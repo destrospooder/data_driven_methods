@@ -1,8 +1,10 @@
 #!/bin/env python
 
 import numpy as np
-from scipy.integrate import solve_ivp
+from scipy.integrate import solve_ivp, cumtrapz
 import matplotlib.pyplot as plt
+import time
+from tqdm import tqdm
 from var_import import *
 
 # Doing the manual implementation first using Brunton example code, then I'll learn how to use PySINDy
@@ -69,80 +71,135 @@ dtempamps = np.diff(tempamps, axis = 0) / dt_field
 tempamps = tempamps[:-1]
 
 Theta = poolData(tempamps, n_tempamps, 2) # because fluids is a quadratic domain
-sparse_knob = 0.01381478 # 0.0137401
+sparse_knob = 0.01 # 0.01381477
 Xi = sparsifyDynamics(Theta, dtempamps, sparse_knob, n_tempamps)
 print(Xi)
 
-def idd_system(t, x):
-    # x is a state vector consisting of x1, x2, x3, ...
-    theta = np.array([
-             1, 
-             x[0], 
-             x[1], 
-             x[2], 
-             x[3], 
-             x[4], 
-             x[5], 
-             x[0] * x[0],
-             x[0] * x[1],
-             x[0] * x[2],
-             x[0] * x[3],
-             x[0] * x[4],
-             x[0] * x[5],
-             x[1] * x[1],
-             x[1] * x[2],
-             x[1] * x[3],
-             x[1] * x[4],
-             x[1] * x[5],
-             x[2] * x[2],
-             x[2] * x[3],
-             x[2] * x[4],
-             x[2] * x[5],
-             x[3] * x[3],
-             x[3] * x[4],
-             x[3] * x[5],
-             x[4] * x[4],
-             x[4] * x[5],
-             x[5] * x[5]])
+fdot_sindy = Theta @ Xi
 
-    return np.array([
-        Xi[:, 0] @ theta,
-        Xi[:, 1] @ theta,
-        Xi[:, 2] @ theta,
-        Xi[:, 3] @ theta,
-        Xi[:, 4] @ theta,
-        Xi[:, 5] @ theta,
-    ])
- 
-x0 = np.array([tempamps[0, 0],
-               tempamps[0, 1],
-               tempamps[0, 2],
-               tempamps[0, 3],
-               tempamps[0, 4],
-               tempamps[0, 5]])
-
-t = [0, 40]
-t_eval = np.linspace(t[0], t[1], 1000) # just to beef up resolution of solve_ivp
-
-sol = solve_ivp(idd_system, t, x0, t_eval = t_eval)
+f_sindy = np.hstack([cumtrapz(fdot_sindy[:, k], t_field[:-1])[:, None] for k in range(6)])
 
 fig, ax1 = plt.subplots(2, 3, figsize = (12, 6))
 
 for k in range(6):
     ax = ax1.flat[k]
-    ax.plot(sol.t + 50, sol.y[k, :])
-    ax.plot(t_field, S[k] * V[:, k], 'r-')
-
-fig.suptitle(f"sindy-derived temporal amplitudes (lambda = {float(sparse_knob)}) vs. pod temporal amplitudes", fontsize = 12)
-plt.legend([f'SINDy (lambda = {float(sparse_knob)})', 'POD'], bbox_to_anchor=(1.05, 0), loc='lower left')
-plt.tight_layout()
-plt.savefig('sindy_figs/comparison.png')
-plt.show()
-
-fig, ax2 = plt.subplots(2, 3, figsize = (12, 6))
-
-for k in range(6):
-    ax = ax2.flat[k]
-    ax.plot(t_field, dtempamps[:, k], 'r-')
+    ax.plot(t_field[:-2], f_sindy[:, k] + tempamps[0, k])
+    ax.plot(t_field[:-1], tempamps[:, k], 'r-')
+ 
+    fig.suptitle(f"sindy-derived temporal amplitudes (lambda = {float(sparse_knob)}) vs. pod temporal amplitudes", fontsize = 12)
+    plt.legend([f'SINDy (lambda = {float(sparse_knob)})', 'POD'], bbox_to_anchor=(1.05, 0), loc='lower left')
+    plt.tight_layout()
+    plt.savefig('sindy_figs/sindy_fit.png')
 
 plt.show()
+
+# def idd_system(t, x, pbar, state):
+#     # just because the integrator is slow as balls
+#     last_t, dt = state
+#     time.sleep(0.1)
+#     n = int((t - last_t) / dt)
+#     pbar.update(n)
+#     state[0] = last_t + dt * n
+    
+#     # x is a state vector consisting of x1, x2, x3, ...
+#     theta = np.array([
+#              1, 
+#              x[0], 
+#              x[1], 
+#              x[2], 
+#              x[3], 
+#              x[4], 
+#              x[5], 
+#              x[0] * x[0],
+#              x[0] * x[1],
+#              x[0] * x[2],
+#              x[0] * x[3],
+#              x[0] * x[4],
+#              x[0] * x[5],
+#              x[1] * x[1],
+#              x[1] * x[2],
+#              x[1] * x[3],
+#              x[1] * x[4],
+#              x[1] * x[5],
+#              x[2] * x[2],
+#              x[2] * x[3],
+#              x[2] * x[4],
+#              x[2] * x[5],
+#              x[3] * x[3],
+#              x[3] * x[4],
+#              x[3] * x[5],
+#              x[4] * x[4],
+#              x[4] * x[5],
+#              x[5] * x[5]])
+
+#     return np.array([
+#         Xi[:, 0] @ theta,
+#         Xi[:, 1] @ theta,
+#         Xi[:, 2] @ theta,
+#         Xi[:, 3] @ theta,
+#         Xi[:, 4] @ theta,
+#         Xi[:, 5] @ theta,
+#     ])
+ 
+# x0 = np.array([tempamps[0, 0],
+#                tempamps[0, 1],
+#                tempamps[0, 2],
+#                tempamps[0, 3],
+#                tempamps[0, 4],
+#                tempamps[0, 5]])
+
+# t = [0, 40]
+# t_eval = np.arange(t[0], t[1], dt_field) # just to beef up resolution of solve_ivp
+
+# # see https://pysindy.readthedocs.io/en/latest/examples/1_feature_overview/example.html for details
+# integrator_keywords = {}
+# integrator_keywords["rtol"] = 1e-12
+# integrator_keywords["method"] = "LSODA"
+# integrator_keywords["atol"] = 1e-12
+
+# with tqdm(total = 1000, unit = '%', desc = 'integrating') as pbar:
+#     sol = solve_ivp(idd_system, 
+#                     t, 
+#                     x0, 
+#                     t_eval = t_eval, 
+#                     args = [pbar, [t[0], ((t[1] - t[0])/1000)]],
+#                     **integrator_keywords)
+
+# fig, ax1 = plt.subplots(2, 3, figsize = (12, 6))
+
+# for k in range(6):
+#     ax = ax1.flat[k]
+#     ax.plot(sol.t + 50, sol.y[k, :])
+#     ax.plot(t_field, S[k] * V[:, k], 'r-')
+
+# fig.suptitle(f"sindy-derived temporal amplitudes (lambda = {float(sparse_knob)}) vs. pod temporal amplitudes", fontsize = 12)
+# plt.legend([f'SINDy (lambda = {float(sparse_knob)})', 'POD'], bbox_to_anchor=(1.05, 0), loc='lower left')
+# plt.tight_layout()
+# plt.savefig('sindy_figs/freq_match.png')
+# plt.show()
+
+# fig, ax2 = plt.subplots(2, 3, figsize = (12, 6))
+
+# for k in range(6):
+#     ax = ax2.flat[k]
+#     ax.plot(t_field[:-1], dtempamps[:, k], 'r-')
+
+# plt.show()
+
+# fdot_sindy = Theta @ Xi
+# f_sindy = np.vstack([cumulative_trapezoid(t_field[:-1], fdot_sindy[:, 0]), 
+#                     cumulative_trapezoid(t_field[:-1], fdot_sindy[:, 1]), 
+#                     cumulative_trapezoid(t_field[:-1], fdot_sindy[:, 2]),
+#                     cumulative_trapezoid(t_field[:-1], fdot_sindy[:, 3]),
+#                     cumulative_trapezoid(t_field[:-1], fdot_sindy[:, 4]),
+#                     cumulative_trapezoid(t_field[:-1], fdot_sindy[:, 5])]).T
+
+# fig, bx = plt.subplots(2, 3, figsize = (12, 6))
+
+# for k in range(6):
+#     ax = bx.flat[k]
+#     ax.plot(t_field[:-2], f_sindy[:, k], 'r-')
+
+# plt.show()
+
+print('bum')

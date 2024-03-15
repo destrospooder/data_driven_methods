@@ -82,7 +82,7 @@ for k in range(6):
     im = ax.contourf(x, y, np.transpose(U_uy[:, k].reshape(nx, ny, order = 'F')), levels = MM * v, vmin = -MM, vmax = MM)
     fig.colorbar(im, ax = ax)
     ax.set_title(f"uy mode {k + 1}")
-    # modes 5, 6 seem to have weird inversions in their behavior when compared to matlab. debug later
+    # modes/amplitudes are inverted in their behavior when compared to matlab. probably due to numpy eigenvector scaling decisions. insignificant
 
 fig.suptitle("uy spatial modes", fontsize = 12)
 plt.tight_layout()
