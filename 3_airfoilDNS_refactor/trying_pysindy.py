@@ -21,9 +21,8 @@ for i in range(n_tempamps):
     tempamps.append(S[i] * V[:, i])
 
 tempamps = np.transpose(tempamps)
-tempamps[:, 4:] = -tempamps[
-    :, 4:
-]  # for matlab standardization, scaling of evects is irrelevant
+tempamps[:, 4:] = -tempamps[:, 4:]  
+# for matlab standardization, scaling of evects is irrelevant
 
 differentiation_method = ps.FiniteDifference(order=2)
 feature_library = ps.PolynomialLibrary(degree=2)
