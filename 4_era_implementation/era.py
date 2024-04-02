@@ -27,6 +27,8 @@ G_den_4 = s**2 + 2 * zeta[4] * omega[4] * s + omega[4]**2
 delay = ct.pade(tau, 3)
 G = G_num_1 * G_num_2 * G_num_3 * ct.tf(delay[0], delay[1]) / (G_den_1 * G_den_2 * G_den_3 * G_den_4)
 
+# G = 1 / (s + 1)
+
 T = np.linspace(0, 0.015, 1000)
 t, y = ct.impulse_response(G, T)
 
@@ -61,7 +63,7 @@ except FileNotFoundError:
     np.save("svd_store/svdeez_vh.npy", Vh)
     print("SVD components stored for future use.")
 
-r = np.shape(U)[0]
+r = 9 # np.shape(U)[0]
 
 Ur = U[:, :r]
 SVr = np.diag(S[:r])
@@ -71,8 +73,16 @@ A = sc.linalg.fractional_matrix_power(SVr, -0.5) @ Ur.T @ marie_schrader @ Vr @ 
 B = (sc.linalg.fractional_matrix_power(SVr, 0.5) @ (Vr.T)[:, 0]).reshape(-1, 1)
 C = Ur[0, :] @ sc.linalg.fractional_matrix_power(SVr, 0.5)
 
+plt.stem(np.arange(r), np.square(S[:r]), "o")
+plt.xlabel("Index")
+plt.ylabel("Squared Hankel Singular Values")
+plt.suptitle("Significant Hankel SV's (Squared)", fontsize=12)
+plt.semilogy()
+plt.savefig("era_figs/hankel_squared_svs.png")
+plt.show()
+
 G_new = ct.ss(A, B, C, 0, T[1])
-ct.bode_plot([G, G_new], wrap_phase = True)
+ct.bode_plot([G, G_new * T[1]], wrap_phase = True)
 plt.legend(['Original TF', 'ERA Reconstruction'])
 plt.suptitle('Frequency Response Comparison')
 plt.tight_layout()
