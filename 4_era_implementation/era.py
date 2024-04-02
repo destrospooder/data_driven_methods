@@ -13,13 +13,13 @@ tau = 10e-4
 s = ct.tf('s')
 
 G_num_1 = k * omega[1]**2 * omega[2]**2 * omega[4]**2
-G_num_2 = s**2 + 2*zeta[0]*omega[0]*s + omega[0]**2
-G_num_3 = s**2 + 2*zeta[3]*omega[3]*s + omega[3]**2
+G_num_2 = s**2 + 2 * zeta[0] * omega[0] * s + omega[0]**2
+G_num_3 = s**2 + 2 * zeta[3] * omega[3] * s + omega[3]**2
 
 G_den_1 = omega[0]**2 * omega[3]**2
-G_den_2 = s**2 + 2*zeta[1]*omega[1]*s + omega[1]**2
-G_den_3 = s**2 + 2*zeta[2]*omega[2]*s + omega[2]**2
-G_den_4 = s**2 + 2*zeta[4]*omega[4]*s + omega[4]**2
+G_den_2 = s**2 + 2 * zeta[1] * omega[1] * s + omega[1]**2
+G_den_3 = s**2 + 2 * zeta[2] * omega[2] * s + omega[2]**2
+G_den_4 = s**2 + 2 * zeta[4] * omega[4] * s + omega[4]**2
 
 # the ctrl systems library doesn't support time delays directly, but we can use a pade approximation!
 # (hell of a time to learn these existed)
@@ -61,15 +61,20 @@ except FileNotFoundError:
     np.save("svd_store/svdeez_vh.npy", Vh)
     print("SVD components stored for future use.")
 
-SV = np.diag(S)
+r = np.shape(U)[0]
 
-A = sc.linalg.fractional_matrix_power(SV, -0.5) @ U.T @ marie_schrader @ Vh.T @ sc.linalg.fractional_matrix_power(SV, -0.5)
-B = (sc.linalg.fractional_matrix_power(SV, 0.5) @ Vh[:, 0]).reshape(-1, 1)
-C = U[0, :] @ sc.linalg.fractional_matrix_power(SV, 0.5)
+Ur = U[:, :r]
+SVr = np.diag(S[:r])
+Vr = (Vh.T)[:, :r]
+
+A = sc.linalg.fractional_matrix_power(SVr, -0.5) @ Ur.T @ marie_schrader @ Vr @ sc.linalg.fractional_matrix_power(SVr, -0.5)
+B = (sc.linalg.fractional_matrix_power(SVr, 0.5) @ (Vr.T)[:, 0]).reshape(-1, 1)
+C = Ur[0, :] @ sc.linalg.fractional_matrix_power(SVr, 0.5)
 
 G_new = ct.ss(A, B, C, 0, T[1])
 ct.bode_plot([G, G_new], wrap_phase = True)
 plt.legend(['Original TF', 'ERA Reconstruction'])
+plt.suptitle('Frequency Response Comparison')
 plt.tight_layout()
 plt.savefig("era_figs/freq_responses_compared.png")
 plt.show()
