@@ -70,7 +70,7 @@ ax[1].set_ylabel('Velocity [m/s]')
 knob = 0.9
 
 differentiation_method = ps.FiniteDifference(order = 2)
-feature_library = ps.PolynomialLibrary(degree = 1)
+feature_library = ps.PolynomialLibrary(degree = 1, include_bias = False)
 optimizer = ps.optimizers.STLSQ(threshold = knob)
 
 model = ps.SINDy(
@@ -84,4 +84,4 @@ X = np.vstack([data.y[0] + noise[0, :], data.y[1] + noise[1, :]])
 model.fit(X.T, u = ctrl_inputs, t = data.t)
 model.print()
 
-print('debug')
+coeffs = model.coefficients()
