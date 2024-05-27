@@ -1,0 +1,47 @@
+# Singular Value Decomposition
+
+## Overview
+
+The singular value decomposition (SVD) is a fundamental matrix factorization with numerous applications in data analysis and scientific computing. Mathematically, the SVD of an $m\times n$ matrix $\textbf{X}$ is a factorization of the form:
+
+$$ \textbf{X} = \textbf{U} \Sigma \textbf{V}^* $$
+
+where $\textbf{U}$ is an $m\times m$ orthogonal matrix, $\Sigma$ is an $m\times n$ diagonal matix with non-negative real numbers on the diagonal, and $\textbf{V}$ is an $n\times n$ orthogonal matrix.
+
+The SVD is particularly useful for analyzing large, high-dimensional datasets that can be well-approximated by matrices of much lower rank. By extracting the dominant patterms in the data, the SVD enables efficient dimensionality reduction, noise removal, and data compression. It is the foundation of techniques like principal component analysis (PCA) and is widely applied in fields such as signal processing, machine learning, and image analysis.
+
+Proper orthogonal decomposition (POD) modes are a set of orthogonal basis functions that optimally represent a given dataset in a least-squares sense. They are obtained by performing an SVD on a data matrix. POD modes form an orthonormal basis, meaning the modes are mutually orthogonal and have unit norm.
+
+The modes are ranked by their energy content, with the first mode capturing the most energy and subsequent modes capturing progressively less energy.
+
+## POD Analysis of Low Reynolds Number Pitching Airfoil DNS
+
+The [dataset](https://deepblue.lib.umich.edu/data/concern/data_sets/6395w7505?locale=en) analyzed contains direct numerical simulations (DNS) of two-dimensional stationary and pitching flat-plate airfoils at a Reynolds number of 100. The dataset includes time-resolved snapshots of the velocity field, lift and drag coefficients, and airfoil kinematics spanning 40-100 convective time units. The cases consist of a stationary airfoil and eight different pitching frequencies. This dataset is part of a database intended to aid in the conception, training, demonstration, evaluation, and comparison of reduced-complexity models for fluid mechanics, created by Aaron Towne and Scott Dawson.
+
+The dataset also includes a MATLAB function that provides a simple implementation of Dynamic Mode Decomposition (DMD), a data-driven method we'll get to later.
+
+To analyze the DNS data using POD, I first extracted the velocity components from the provided snapshots. I then computed the mean-corrected snapshots by subtracting the mean of each snapshot and arranged them into a matrix $\textbf{X}$.
+
+Next, I performed an economy-sized SVD on $\textbf{X}$. The squared singular values are plotted here, as a function of the mode index.
+
+![squared_sv](images/pod_analysis_figs/squared_sv.png)
+
+This plot reveals how many individual POD basis vectors there are. The rapid decay of the singular values indicates that the flow is well-approximated by a low-rank subspace, with the first 16 modes capturing the majority of the energy.
+
+![squared_sv_truncated](images/pod_analysis_figs/squared_sv_truncated.png)
+
+Visualizing the first six POD modes for both $u_x$ and $u_y$ revealed the spatial structure of the dominant flow patterns. The oscillatory modes have a characteristic wavelength that can be estimated from the spatial distribution of the mode amplitudes.
+
+![ux_spatial_modes](images/pod_analysis_figs/ux_spatial_modes.png)
+
+![uy_spatial_modes](images/pod_analysis_figs/uy_spatial_modes.png)
+
+Here are the temporal amplitudes associated with those spatial modes:
+
+![temporal_amplitudes](images/pod_analysis_figs/temporal_amplitudes.png)
+
+Finally, I reconstructed the snapshots using a rank-4 approximation, which captures the most energetic flow structures. Comparing the reconstructed snapshots with the original data showed that the low-rank approximation successfully recovers the essential flow physics, such as the presence of coherent structures and the overall flow patterns.
+
+![ux_reconstruction](images/pod_analysis_figs/ux_reconstruction.png)
+
+![uy_reconstruction](images/pod_analysis_figs/uy_reconstruction.png)

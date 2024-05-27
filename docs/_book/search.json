@@ -1,0 +1,86 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ME493 - Methods of Data-Driven Control",
+    "section": "",
+    "text": "Preface\nDocumentation of the independent study ME493: Methods of Data-Driven Control, taken during Spring 2024.\nInstructor: Dirk M. Luchtenburg Co-conspirators: Sohaib Bhatti, Khushant Khurana, Eunkyu (Q) Kim, Sonam Okuda Email: dirk.luchtenburg@cooper.edu\nDescription: This independent study provides an introduction to state-of-the-art methods employed in the field of data-driven engineering. Data-driven methods such as the proper orthogonal decomposition and the dynamic mode decomposition are used in a variety of fields including fluid dynamics, climate analysis, mixing problems, the study of infectious diseases, etc. Data-driven methods rely heavily on concepts from linear algebra, calculus, probability, and statistics. We will review these essential elements and develop a hands-on understanding of a selection of data-driven methods. The study culminates with an application of some method(s) to a practical problem which is to be carefully detailed in a technical report.\nReferenced texts include the following:\n\nStrang (2019) \nBrunton and Kutz (2022) \nBoyd and Vandenberghe (2018) \nGéron (2022) \nSutton and Barto (2018)\n\n\n\n\n\nBoyd, Stephen, and Lieven Vandenberghe. 2018. Introduction to Applied Linear Algebra: Vectors, Matrices, and Least Squares. Cambridge University Press.\n\n\nBrunton, Steven L, and J Nathan Kutz. 2022. Data-Driven Science and Engineering: Machine Learning, Dynamical Systems, and Control. Vol. 2. Cambridge University Press.\n\n\nGéron, Aurélien. 2022. Hands-on Machine Learning with Scikit-Learn, Keras, and TensorFlow. O’Reilly Media, Inc.\n\n\nStrang, Gilbert. 2019. Linear Algebra and Learning from Data. SIAM.\n\n\nSutton, Richard S, and Andrew G Barto. 2018. Reinforcement Learning: An Introduction. MIT Press."
+  },
+  {
+    "objectID": "ch1.html",
+    "href": "ch1.html",
+    "title": "1  The Four Fundamental Subspaces",
+    "section": "",
+    "text": "In the Strang-ian view of linear algebra, an \\(m\\) by \\(n\\) matrix \\(\\textbf{A}\\) is associated with four fundamental subspaces - two of \\(\\mathbb{R}^m\\) and two of \\(\\mathbb{R}^n\\). It’s easiest to illustrate this using an example matrix:\n\\[ \\textbf{A} = \\begin{bmatrix}\n1 & 2 & 3 \\\\\n4 & 5 & 6\n\\end{bmatrix} = \\begin{bmatrix}\n\\textbf{r}_1 \\\\\n\\textbf{r}_2\n\\end{bmatrix} = \\begin{bmatrix}\n\\textbf{c}_1 &\n\\textbf{c}_2 &\n\\textbf{c}_3 \\end{bmatrix} \\]\nwhere:\n\\[ \\textbf{r}_1 = \\begin{bmatrix} 1 & 2 & 3 \\end{bmatrix} \\quad \\textbf{r}_2 = \\begin{bmatrix} 4 & 5 & 6 \\end{bmatrix} \\]\n\\[ \\textbf{c}_1 = \\begin{bmatrix} 1 & 4 \\end{bmatrix}^T \\quad \\textbf{c}_2 = \\begin{bmatrix} 2 & 5 \\end{bmatrix}^T \\quad \\textbf{c}_3 = \\begin{bmatrix} 3 & 6 \\end{bmatrix}^T \\]\n\n\n\n\n\n\nColumn Space\n\n\n\nThe column space (or range) \\(R(\\textbf{A})\\) contains all linear combinations of the column vectors of \\(\\textbf{A}\\).\n\n\nIt only takes two linearly independent vectors to span \\(\\mathbb{R}^2\\), and we have three! Our column space is \\(\\mathbb{R}^2\\).\n\n\n\n\n\n\nRow Space\n\n\n\nThe row space \\(R(\\textbf{A}^T)\\) contains all linear combinations of the column vectors of \\(\\textbf{A}^T\\) (or equivalently, the row vectors of \\(A\\)).\n\n\nTransposed row vectors \\(\\textbf{r}_1^T\\) and \\(\\textbf{r}_2^T\\) span the following plane:\n\\[ \\left\\{ \\begin{bmatrix} x_1 + 4x_2 \\\\ 2x_1 + 5x_2 \\\\ 3x_1 + 6x_2 \\end{bmatrix} : \\textbf{x} \\in \\mathbb{R}^2 \\right\\} \\]\n\n\n\n\n\n\nNull Space\n\n\n\nThe null space \\(N(\\textbf{A})\\) contains all solutions \\(\\textbf{u}\\) to \\(\\textbf{Au} = \\textbf{0}\\).\n\n\nSolving this equation yields the nontrivial solution:\n\\[ \\textbf{u} = \\begin{bmatrix} 1 \\\\ -2 \\\\ 1 \\end{bmatrix} \\]\nOur null space is the span of \\(\\textbf{u}\\), or the following line:\n\\[ \\left\\{ \\begin{bmatrix} x \\\\ -2x \\\\ x \\end{bmatrix} : x \\in \\mathbb{R} \\right\\} \\]\n\n\n\n\n\n\nLeft Null Space\n\n\n\nThe left null space \\(N(\\textbf{A}^T)\\) contains all solutions \\(\\textbf{v}\\) to \\(\\textbf{A}^T \\textbf{v} = \\textbf{0}\\).\n\n\nThis equation has no nontrivial solutions, so the left null space is the zero subspace.\nThe “big picture of linear algebra,” as Gil Strang puts it, is that for an \\(m\\) by \\(n\\) matrix \\(\\textbf{A}\\):\n\nThe column space/range \\(R(\\textbf{A})\\) is perpendicular to the left null space \\(N(\\textbf{A}^T)\\) in \\(\\mathbb{R}^m\\)\nThe row space \\(R(\\textbf{A}^T)\\) is perpendicular to the null space \\(N(\\textbf{A})\\) in \\(\\mathbb{R}^n\\)\n\n\n\n\n\n\n\nRank\n\n\n\nThe rank \\(r\\) of a matrix \\(\\textbf{A}\\) is the number of independent rows/columns, i.e., the row space and column space/range have the same dimension \\(r\\).\n\n\n\nThe dimension of the null space \\(N(\\textbf{A})\\) is \\(n-r\\) and the dimension of the left null space \\(N(\\textbf{A}^T)\\) is \\(m-r\\)."
+  },
+  {
+    "objectID": "ch2.html#overview",
+    "href": "ch2.html#overview",
+    "title": "2  Singular Value Decomposition",
+    "section": "2.1 Overview",
+    "text": "2.1 Overview\nThe singular value decomposition (SVD) is a fundamental matrix factorization with numerous applications in data analysis and scientific computing. Mathematically, the SVD of an \\(m\\times n\\) matrix \\(\\textbf{X}\\) is a factorization of the form:\n\\[ \\textbf{X} = \\textbf{U} \\Sigma \\textbf{V}^* \\]\nwhere \\(\\textbf{U}\\) is an \\(m\\times m\\) orthogonal matrix, \\(\\Sigma\\) is an \\(m\\times n\\) diagonal matix with non-negative real numbers on the diagonal, and \\(\\textbf{V}\\) is an \\(n\\times n\\) orthogonal matrix.\nThe SVD is particularly useful for analyzing large, high-dimensional datasets that can be well-approximated by matrices of much lower rank. By extracting the dominant patterms in the data, the SVD enables efficient dimensionality reduction, noise removal, and data compression. It is the foundation of techniques like principal component analysis (PCA) and is widely applied in fields such as signal processing, machine learning, and image analysis.\nProper orthogonal decomposition (POD) modes are a set of orthogonal basis functions that optimally represent a given dataset in a least-squares sense. They are obtained by performing an SVD on a data matrix. POD modes form an orthonormal basis, meaning the modes are mutually orthogonal and have unit norm.\nThe modes are ranked by their energy content, with the first mode capturing the most energy and subsequent modes capturing progressively less energy."
+  },
+  {
+    "objectID": "ch2.html#pod-analysis-of-low-reynolds-number-pitching-airfoil-dns",
+    "href": "ch2.html#pod-analysis-of-low-reynolds-number-pitching-airfoil-dns",
+    "title": "2  Singular Value Decomposition",
+    "section": "2.2 POD Analysis of Low Reynolds Number Pitching Airfoil DNS",
+    "text": "2.2 POD Analysis of Low Reynolds Number Pitching Airfoil DNS\nThe dataset analyzed contains direct numerical simulations (DNS) of two-dimensional stationary and pitching flat-plate airfoils at a Reynolds number of 100. The dataset includes time-resolved snapshots of the velocity field, lift and drag coefficients, and airfoil kinematics spanning 40-100 convective time units. The cases consist of a stationary airfoil and eight different pitching frequencies. This dataset is part of a database intended to aid in the conception, training, demonstration, evaluation, and comparison of reduced-complexity models for fluid mechanics, created by Aaron Towne and Scott Dawson.\nThe dataset also includes a MATLAB function that provides a simple implementation of Dynamic Mode Decomposition (DMD), a data-driven method we’ll get to later.\nTo analyze the DNS data using POD, I first extracted the velocity components from the provided snapshots. I then computed the mean-corrected snapshots by subtracting the mean of each snapshot and arranged them into a matrix \\(\\textbf{X}\\).\nNext, I performed an economy-sized SVD on \\(\\textbf{X}\\). The squared singular values are plotted here, as a function of the mode index.\n\n\n\nsquared_sv\n\n\nThis plot reveals how many individual POD basis vectors there are. The rapid decay of the singular values indicates that the flow is well-approximated by a low-rank subspace, with the first 16 modes capturing the majority of the energy.\n\n\n\nsquared_sv_truncated\n\n\nVisualizing the first six POD modes for both \\(u_x\\) and \\(u_y\\) revealed the spatial structure of the dominant flow patterns. The oscillatory modes have a characteristic wavelength that can be estimated from the spatial distribution of the mode amplitudes.\n\n\n\nux_spatial_modes\n\n\n\n\n\nuy_spatial_modes\n\n\nHere are the temporal amplitudes associated with those spatial modes:\n\n\n\ntemporal_amplitudes\n\n\nFinally, I reconstructed the snapshots using a rank-4 approximation, which captures the most energetic flow structures. Comparing the reconstructed snapshots with the original data showed that the low-rank approximation successfully recovers the essential flow physics, such as the presence of coherent structures and the overall flow patterns.\n\n\n\nux_reconstruction\n\n\n\n\n\nuy_reconstruction"
+  },
+  {
+    "objectID": "ch3.html#overview-dynamic-mode-decomposition",
+    "href": "ch3.html#overview-dynamic-mode-decomposition",
+    "title": "3  Data-Driven Dynamical Systems",
+    "section": "3.1 Overview: Dynamic Mode Decomposition",
+    "text": "3.1 Overview: Dynamic Mode Decomposition\nDynamic mode decomposition (DMD) is a dimensionality reduction technique developed in the fluid dynamics community to extract spatiotemporal coherent structures from high-dimensional data. Unlike principal component analysis (PCA) or proper orthogonal decomposition (POD), which focus solely on spatial correlations or energy content, DMD provides a modal decomposition where each mode is associated with a specific oscillation frequency and growth/decay rate. This allows DMD to capture the temporal evolution of the system, in addition to reducing the dimensionality. DMD achieves this by approximating the Koopman operator, which describes the linear dynamics governing the system, rather than just identifying the dominant spatial patterns like PCA/POD. As a result, DMD modes can be more physically meaningful than the orthogonal modes generated by PCA, as they directly correspond to the intrinsic temporal behaviors of the system.\nDMD operates on a series of data snapshots, typically obtained from simulations or experiments. These snapshots are organized into a matrix \\(\\textbf{V}\\), where:\n\\[ \\textbf{V} = \\left[ \\textbf{v}_1 \\quad \\textbf{v}_2 \\quad \\cdots \\quad \\textbf{v}_N \\right] \\in \\mathbb{R}^{M \\times N}\\]\nEach \\(\\textbf{v}_i \\in \\mathbb{R}^M\\) represents a snapshot at a specific time. DMD attempts to find a linear operator \\(\\textbf{A}\\) that approximates the evolution of the system from one snapshot to the next.\nFirst, the snapshot data is arranged into two matrices \\(\\textbf{X}\\) and \\(\\textbf{X}'\\), where \\(\\textbf{X}\\) contains the first N-1 snapshots and \\(\\textbf{X}'\\) contains the last N-1 snapshots.\nThe SVD of \\(\\textbf{X}\\) is taken. To deal with high-dimensional data, a reduced order representation may be used, by truncating the SVD to the first \\(r\\) modes.\n\\[ \\textbf{X} = \\textbf{U} \\Sigma \\textbf{V}^* \\approx \\textbf{U}_r \\Sigma_r \\textbf{V}^*_r\\]\nThe full matrix \\(\\textbf{A}\\) is found by computing the pseudo-inverse of \\(\\textbf{X}\\):\n\\[ \\textbf{A} = \\textbf{X}' \\textbf{V}_r \\Sigma_r^{-1} \\textbf{U}_r^* \\]\nThe next step involves computing the matrix \\(\\tilde{\\textbf{A}}\\), which is the projection of \\(\\textbf{A}\\) onto the subspace spanned by the columns of \\(\\textbf{U}_r\\).\n\\[ \\tilde{\\textbf{A}} = \\textbf{U}_r^* \\textbf{A} \\textbf{U}_r = \\textbf{U}_r^* \\textbf{X}' \\textbf{V}_r \\Sigma_r^{-1} \\]\nThen, we “eigendecompose” (is that a word?) \\(\\tilde{\\textbf{A}}\\) to find its eigenvalues \\(\\Lambda\\) and eigenvectors \\(\\textbf{W}\\). These eigenvalues and eigenvectors are used to compute the DMD modes \\(\\Phi\\), which are given by:\n\\[\\Phi = \\textbf{X}' \\textbf{V}_r \\Sigma_r^{-1} \\textbf{W}\\]\nNotably, these high-dimensional DMD modes are also the eigenvectors of the full \\(\\textbf{A}\\) matrix corresponding to the eigenvalues in \\(\\Lambda\\)."
+  },
+  {
+    "objectID": "ch3.html#dmd-analysis-of-low-reynolds-number-pitching-airfoil-dns",
+    "href": "ch3.html#dmd-analysis-of-low-reynolds-number-pitching-airfoil-dns",
+    "title": "3  Data-Driven Dynamical Systems",
+    "section": "3.2 DMD Analysis of Low Reynolds Number Pitching Airfoil DNS",
+    "text": "3.2 DMD Analysis of Low Reynolds Number Pitching Airfoil DNS"
+  },
+  {
+    "objectID": "ch3.html#overview-sparse-identification-of-nonlinear-dynamics",
+    "href": "ch3.html#overview-sparse-identification-of-nonlinear-dynamics",
+    "title": "3  Data-Driven Dynamical Systems",
+    "section": "3.3 Overview: Sparse Identification of Nonlinear Dynamics",
+    "text": "3.3 Overview: Sparse Identification of Nonlinear Dynamics"
+  },
+  {
+    "objectID": "ch3.html#sindy-implementation-on-temporal-amplitudes",
+    "href": "ch3.html#sindy-implementation-on-temporal-amplitudes",
+    "title": "3  Data-Driven Dynamical Systems",
+    "section": "3.4 SINDy Implementation on Temporal Amplitudes",
+    "text": "3.4 SINDy Implementation on Temporal Amplitudes"
+  },
+  {
+    "objectID": "ch4.html#overview",
+    "href": "ch4.html#overview",
+    "title": "4  Model Reduction and Projection",
+    "section": "4.1 Overview",
+    "text": "4.1 Overview"
+  },
+  {
+    "objectID": "ch5.html#overview-eigensystem-realization-algorithm",
+    "href": "ch5.html#overview-eigensystem-realization-algorithm",
+    "title": "5  System Identification Techniques",
+    "section": "5.1 Overview: Eigensystem Realization Algorithm",
+    "text": "5.1 Overview: Eigensystem Realization Algorithm"
+  },
+  {
+    "objectID": "ch5.html#overview-dmd-with-control",
+    "href": "ch5.html#overview-dmd-with-control",
+    "title": "5  System Identification Techniques",
+    "section": "5.2 Overview: DMD with Control",
+    "text": "5.2 Overview: DMD with Control"
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Boyd, Stephen, and Lieven Vandenberghe. 2018. Introduction to\nApplied Linear Algebra: Vectors, Matrices, and Least Squares.\nCambridge University Press.\n\n\nBrunton, Steven L, and J Nathan Kutz. 2022. Data-Driven Science and\nEngineering: Machine Learning, Dynamical Systems, and Control. Vol.\n2. Cambridge University Press.\n\n\nGéron, Aurélien. 2022. Hands-on Machine Learning with Scikit-Learn,\nKeras, and TensorFlow. O’Reilly Media, Inc.\n\n\nStrang, Gilbert. 2019. Linear Algebra and Learning from Data.\nSIAM.\n\n\nSutton, Richard S, and Andrew G Barto. 2018. Reinforcement Learning:\nAn Introduction. MIT Press."
+  }
+]

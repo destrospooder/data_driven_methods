@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: a64e652c-8b5a-4971-96fa-b2197f25c010
+      url: 'https://azielben.quarto.pub/me493-ddc'

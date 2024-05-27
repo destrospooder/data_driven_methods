@@ -1,0 +1,68 @@
+# The Four Fundamental Subspaces
+
+In the Strang-ian view of linear algebra, an $m$ by $n$ matrix $\textbf{A}$ is associated with four fundamental subspaces - two of $\mathbb{R}^m$ and two of $\mathbb{R}^n$. It's easiest to illustrate this using an example matrix:
+
+$$ \textbf{A} = \begin{bmatrix}
+1 & 2 & 3 \\
+4 & 5 & 6 
+\end{bmatrix} = \begin{bmatrix}
+\textbf{r}_1 \\
+\textbf{r}_2
+\end{bmatrix} = \begin{bmatrix}
+\textbf{c}_1 &
+\textbf{c}_2 & 
+\textbf{c}_3 \end{bmatrix} $$
+
+where:
+
+$$ \textbf{r}_1 = \begin{bmatrix} 1 & 2 & 3 \end{bmatrix} \quad \textbf{r}_2 = \begin{bmatrix} 4 & 5 & 6 \end{bmatrix} $$
+
+$$ \textbf{c}_1 = \begin{bmatrix} 1 & 4 \end{bmatrix}^T \quad \textbf{c}_2 = \begin{bmatrix} 2 & 5 \end{bmatrix}^T \quad \textbf{c}_3 = \begin{bmatrix} 3 & 6 \end{bmatrix}^T $$
+
+::: {.callout-tip}
+## Column Space
+The column space (or range) $R(\textbf{A})$ contains all linear combinations of the column vectors of $\textbf{A}$.
+:::
+
+It only takes two linearly independent vectors to span $\mathbb{R}^2$, and we have three! Our column space is $\mathbb{R}^2$.
+
+::: {.callout-tip}
+## Row Space
+The row space $R(\textbf{A}^T)$ contains all linear combinations of the column vectors of $\textbf{A}^T$ (or equivalently, the row vectors of $A$).
+:::
+
+Transposed row vectors $\textbf{r}_1^T$ and $\textbf{r}_2^T$ span the following plane:
+
+$$ \left\{ \begin{bmatrix} x_1 + 4x_2 \\ 2x_1 + 5x_2 \\ 3x_1 + 6x_2 \end{bmatrix} : \textbf{x} \in \mathbb{R}^2 \right\} $$
+
+::: {.callout-tip}
+## Null Space
+The null space $N(\textbf{A})$ contains all solutions $\textbf{u}$ to $\textbf{Au} = \textbf{0}$.
+:::
+
+Solving this equation yields the nontrivial solution:
+
+$$ \textbf{u} = \begin{bmatrix} 1 \\ -2 \\ 1 \end{bmatrix} $$
+
+Our null space is the span of $\textbf{u}$, or the following line:
+
+$$ \left\{ \begin{bmatrix} x \\ -2x \\ x \end{bmatrix} : x \in \mathbb{R} \right\} $$
+
+::: {.callout-tip}
+## Left Null Space
+The left null space $N(\textbf{A}^T)$ contains all solutions $\textbf{v}$ to $\textbf{A}^T \textbf{v} = \textbf{0}$.
+:::
+
+This equation has no nontrivial solutions, so the left null space is the zero subspace.
+
+The "big picture of linear algebra," as Gil Strang puts it, is that for an $m$ by $n$ matrix $\textbf{A}$:
+
+- The column space/range $R(\textbf{A})$ is perpendicular to the left null space $N(\textbf{A}^T)$ in $\mathbb{R}^m$
+- The row space $R(\textbf{A}^T)$ is perpendicular to the null space $N(\textbf{A})$ in $\mathbb{R}^n$
+
+::: {.callout-tip}
+## Rank
+The rank $r$ of a matrix $\textbf{A}$ is the number of independent rows/columns, i.e., the row space and column space/range have the same dimension $r$.
+:::
+
+- The dimension of the null space $N(\textbf{A})$ is $n-r$ and the dimension of the left null space $N(\textbf{A}^T)$ is $m-r$.
