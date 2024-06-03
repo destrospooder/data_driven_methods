@@ -16,3 +16,5 @@ Next, the SINDyC algorithm is set up using the [PySINDy](https://pysindy.readthe
 The MPC controller is configured using the [do_mpc](https://www.do-mpc.com/en/latest/) library. The state variables are the prey and predator populations, and the control input is an unspecified external action.
 
 The objective function for the MPC controller is defined as minimizing the sum of squared population rates of prey and predators, effectively aiming to stabilize the populations of both species. The MPC controller and a simulator are initialized with the same initial conditions for the prey and predator populations. A simulation loop is run for 20 time steps, where the MPC controller computes the optimal control input at each step, and the simulator updates the system state based on the control input.
+
+Figures can be found on my repository.
