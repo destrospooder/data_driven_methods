@@ -155,13 +155,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Model Reduction and Projection</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">System Identification Techniques</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">System Identification Techniques</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">2024SP Project: Population Dynamics</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -241,7 +241,7 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="3.4" class="anchored" data-anchor-id="sindy-implementation-on-temporal-amplitudes"><span class="header-section-number">3.4</span> SINDy Implementation on Temporal Amplitudes</h2>
 <p>We attempt to fit a dynamic system <span class="math inline">\(\dot{\textbf{x}} = f(\textbf{x})\)</span> to the POD temporal amplitudes using the SINDy algorithm. We select a number of temporal amplitudes to consider (6, in this case) and construct the matrix of temporal amplitudes tempamps by scaling the right singular vectors <span class="math inline">\(\textbf{V}\)</span> with the singular values <span class="math inline">\(\Sigma\)</span>.</p>
 <p>Next, we compute the time derivatives of the temporal amplitudes using finite differences. We then pool the data to form a library of candidate functions <span class="math inline">\(\Theta\)</span>, including polynomial terms up to the second order, using a function that constructs a matrix where each column is a candidate term for the dynamics, such as constant, linear, and quadratic terms of the state variables.</p>
-<p>We perform sequential thresholding least squares to find a sparse matrix <span class="math inline">\(\Xi\)</span> that best fits the time derivatives <span class="math inline">\(\dot{x}\)</span> to the candidate functions in <span class="math inline">\(\Theta\)</span>. The sparsification process involves iteratively zeroing out small coefficients (below the threshold value) and refitting the remaining coefficients.</p>
+<p>We perform sequential thresholding least squares to find a sparse matrix <span class="math inline">\(\Xi\)</span> that best fits the time derivatives <span class="math inline">\(\dot{\textbf{x}}\)</span> to the candidate functions in <span class="math inline">\(\Theta\)</span>. The sparsification process involves iteratively zeroing out small coefficients (below the threshold value) and refitting the remaining coefficients.</p>
 <p>The system is then integrated using cumulative trapezoidal numerical integration. This was initially attempted using Runge-Kutta methods, but these methods proved ineffective likely because the system is multi-scale (and rather complicated), leading to instability and inaccuracies in the solutions.</p>
 <p>We then compare these SINDy-derived amplitudes with the original POD temporal amplitudes by plotting them. The plots show the effectiveness of the SINDy model in capturing the dynamics.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -612,7 +612,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./ch4.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Model Reduction and Projection</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">System Identification Techniques</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -56,7 +56,7 @@ We attempt to fit a dynamic system $\dot{\textbf{x}} = f(\textbf{x})$ to the POD
 
 Next, we compute the time derivatives of the temporal amplitudes using finite differences. We then pool the data to form a library of candidate functions $\Theta$, including polynomial terms up to the second order, using a function that constructs a matrix where each column is a candidate term for the dynamics, such as constant, linear, and quadratic terms of the state variables.
 
-We perform sequential thresholding least squares to find a sparse matrix $\Xi$ that best fits the time derivatives $\dot{x}$ to the candidate functions in $\Theta$. The sparsification process involves iteratively zeroing out small coefficients (below the threshold value) and refitting the remaining coefficients.
+We perform sequential thresholding least squares to find a sparse matrix $\Xi$ that best fits the time derivatives $\dot{\textbf{x}}$ to the candidate functions in $\Theta$. The sparsification process involves iteratively zeroing out small coefficients (below the threshold value) and refitting the remaining coefficients.
 
 The system is then integrated using cumulative trapezoidal numerical integration. This was initially attempted using Runge-Kutta methods, but these methods proved ineffective likely because the system is multi-scale (and rather complicated), leading to instability and inaccuracies in the solutions.
 

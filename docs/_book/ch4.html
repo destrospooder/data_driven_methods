@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ME493 - Methods of Data-Driven Control - 4&nbsp; Model Reduction and Projection</title>
+<title>ME493 - Methods of Data-Driven Control - 4&nbsp; System Identification Techniques</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -63,6 +63,8 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -106,7 +108,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ch4.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Model Reduction and Projection</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ch4.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">System Identification Techniques</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -153,13 +155,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch4.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Model Reduction and Projection</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">System Identification Techniques</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">System Identification Techniques</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">2024SP Project: Population Dynamics</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -178,7 +180,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">4.1</span> Overview</a></li>
+  <li><a href="#overview-eigensystem-realization-algorithm" id="toc-overview-eigensystem-realization-algorithm" class="nav-link active" data-scroll-target="#overview-eigensystem-realization-algorithm"><span class="header-section-number">4.1</span> Overview: Eigensystem Realization Algorithm</a></li>
+  <li><a href="#atomic-force-microscope-transfer-function-recovery" id="toc-atomic-force-microscope-transfer-function-recovery" class="nav-link" data-scroll-target="#atomic-force-microscope-transfer-function-recovery"><span class="header-section-number">4.2</span> Atomic Force Microscope Transfer Function Recovery</a></li>
+  <li><a href="#overview-dmd-with-control" id="toc-overview-dmd-with-control" class="nav-link" data-scroll-target="#overview-dmd-with-control"><span class="header-section-number">4.3</span> Overview: DMD with Control</a></li>
   </ul>
 </nav>
     </div>
@@ -187,7 +191,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Model Reduction and Projection</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">System Identification Techniques</span></h1>
 </div>
 
 
@@ -202,8 +206,107 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="overview" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">4.1</span> Overview</h2>
+<section id="overview-eigensystem-realization-algorithm" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="overview-eigensystem-realization-algorithm"><span class="header-section-number">4.1</span> Overview: Eigensystem Realization Algorithm</h2>
+<p>The Eigensystem Realization Algorithm (ERA) is a method used in system identification to derive a state-space model from time-domain data, typically impulse or step response data.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hankel Matrix
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A Hankel matrix is a structured matrix where each ascending diagonal from left to right is constant.</p>
+</div>
+</div>
+<p>Two Hankel matrices are constructed from the collected data. Let <span class="math inline">\(\textbf{y}\)</span> be the sequence of observed data points. Then the Hankel matrix <span class="math inline">\(\textbf{H}_0\)</span> and the shifted Hankel matrix <span class="math inline">\(\textbf{H}_1\)</span> are defined as:</p>
+<p><span class="math display">\[
+\textbf{H}_0 = \begin{bmatrix}
+y_1 &amp; y_2 &amp; \cdots &amp; y_m \\
+y_2 &amp; y_3 &amp; \cdots &amp; y_{m+1} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+y_n &amp; y_{n+1} &amp; \cdots &amp; y_{n+m-1}
+\end{bmatrix}
+\]</span></p>
+<p><span class="math display">\[
+\textbf{H}_1 = \begin{bmatrix}
+y_2 &amp; y_3 &amp; \cdots &amp; y_{m+1} \\
+y_3 &amp; y_4 &amp; \cdots &amp; y_{m+2} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+y_{n+1} &amp; y_{n+2} &amp; \cdots &amp; y_{n+m}
+\end{bmatrix}
+\]</span></p>
+<p>The singular value decomposition (SVD) is performed on <span class="math inline">\(\textbf{H}_0\)</span> (and truncated to keep only the most significant singular values):</p>
+<p><span class="math display">\[\textbf{H}_0 = \textbf{U} \Sigma \textbf{V}^* \approx \textbf{U}_r \Sigma_r \textbf{V}^*_r\]</span></p>
+<p>The reduced matrices are used to construct the state-space matrices <span class="math inline">\(\textbf{A}\)</span>, <span class="math inline">\(\textbf{B}\)</span>, and <span class="math inline">\(\textbf{C}\)</span>:</p>
+<p><span class="math display">\[\textbf{A} = \Sigma_r^{-0.5} \textbf{U}_r^* \textbf{H}_1 \textbf{V}_r \Sigma_r^{-0.5}\]</span> <span class="math display">\[\textbf{B} = \Sigma_r^{0.5} \textbf{V}_r^* [:, 0]\]</span> <span class="math display">\[\textbf{C} = \textbf{U}_r [0, :] \Sigma_r^{0.5} \]</span></p>
+<p>When constructing the Hankel matrices, collecting sufficient data ensures balanced controllability and observability Gramians <span class="math inline">\(\mathcal{O}_d \mathcal{O}_d^*\)</span> and <span class="math inline">\(\mathcal{C}_d \mathcal{C}_d^*\)</span>. If data is insufficient, ERA only approximates the balance. Alternatively, collecting enough data for the Hankel matrices to reach numerical full rank (where remaining singular values are below a threshold) yields a low-order ERA model.</p>
+</section>
+<section id="atomic-force-microscope-transfer-function-recovery" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="atomic-force-microscope-transfer-function-recovery"><span class="header-section-number">4.2</span> Atomic Force Microscope Transfer Function Recovery</h2>
+<p>We use the Eigensystem Realization Algorithm (ERA) to perform system identification on a transfer function representing the dynamics of an atomic force microscope.</p>
+<p><span class="math display">\[ G(s) = \frac{k\omega_2^2 \omega_3^2 \omega_5^2 \left( s^2 + 2\zeta_1 \omega_1 s + \omega_1^2 \right) \left( s^2 + 2\zeta_4 \omega_4 s + \omega_4^2 \right) e^{-s\tau}}{\omega_1^2 \omega_4^2 \left( s^2 + 2\zeta_2 \omega_2 s + \omega_2^2 \right) \left( s^2 + 2\zeta_3 \omega_3 s + \omega_3^2 \right) \left( s^2 + 2\zeta_5 \omega_5 s + \omega_5^2 \right)} \]</span></p>
+<p>with <span class="math inline">\(\omega_i = 2\pi f_i\)</span>, <span class="math inline">\(k\)</span> = 5,</p>
+<p><span class="math display">\[\begin{align*}
+f_1 &amp;= 2.4 \text{ kHz}, &amp; f_2 &amp;= 2.6 \text{ kHz}, &amp; f_3 &amp;= 6.5 \text{ kHz}, &amp; f_4 &amp;= 8.3 \text{ kHz}, &amp; f_5 &amp;= 9.3 \text{ kHz,} \\
+\zeta_1 &amp;= 0.03, &amp; \zeta_2 &amp;= 0.03, &amp; \zeta_3 &amp;= 0.042, &amp; \zeta_4 &amp;= 0.025, &amp; \zeta_5 &amp;= 0.032
+\end{align*}\]</span></p>
+<p>and <span class="math inline">\(\tau = 10^{-4}\)</span> s.</p>
+<p>A Padé approximant is used to handle the time delay, as the <a href="https://python-control.readthedocs.io/en/0.10.0/">control</a> library does not support time delays directly.</p>
+<p>The impulse response of the system is computed over a specified time range.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/era_figs/original_sys_impulse.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Impulse response of the provided transfer function.</figcaption>
+</figure>
+</div>
+<p>Hankel matrices are constructed using the impulse response data. The SVD is used to decompose the Hankel matrix into components that facilitate the identification of the system’s state-space representation.</p>
+<p>The state-space matrices <span class="math inline">\(\textbf{A}\)</span>, <span class="math inline">\(\textbf{B}\)</span>, and <span class="math inline">\(\textbf{C}\)</span> are calculated using the truncated SVD components and fractional matrix powers. This step essentially reduces the system to a simplified model while preserving its significant dynamics.</p>
+<p>The squared singular values of the Hankel matrix are plotted to identify the most significant components.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/era_figs/hankel_squared_svs.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Most significant Hankel squared singular values.</figcaption>
+</figure>
+</div>
+<p>A new state-space model is created using the ERA results. Bode plots of the original and reconstructed systems are generated and compared. These plots visualize the frequency response of both systems, ensuring that the reconstructed model accurately represents the original system’s dynamics.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/era_figs/freq_responses_compared.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Frequency responses of the original and reconstructed images.</figcaption>
+</figure>
+</div>
+<p>Due to the use of the Padé approximant for handling the time delay in the system, there are minor discrepancies in the phase of the frequency response. While it effectively captures the overall behavior of the delay, it can introduce slight inaccuracies in the phase response, especially at higher frequencies. Consequently, the phase response of the system might not perfectly align with the actual phase characteristics, although the magnitude response remains largely unaffected.</p>
+</section>
+<section id="overview-dmd-with-control" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="overview-dmd-with-control"><span class="header-section-number">4.3</span> Overview: DMD with Control</h2>
+<p>Dynamic Mode Decomposition with control (DMDc) is a modification of the standard DMD algorithm designed to handle input-output systems where actuation or control inputs are present. In short, the DMDc method tries to find the best-fit linear operators <span class="math inline">\(\textbf{A}\)</span> and <span class="math inline">\(\textbf{B}\)</span> that approximately describe the following dynamics based on measurement data:</p>
+<p><span class="math display">\[\textbf{x}_{k+1} \approx \textbf{A} \textbf{x}_k + \textbf{B} \textbf{u}_k\]</span></p>
+<p><span class="math inline">\(\textbf{X}\)</span> and <span class="math inline">\(\textbf{X}\)</span>’ are defined as they were for standard DMD. A matrix of the actuation input history is assembled, defined as follows:</p>
+<p><span class="math display">\[\Upsilon = \begin{bmatrix} \textbf{u}_1 &amp; \textbf{u}_2 &amp; \cdots &amp; \textbf{u}_N \end{bmatrix}\]</span></p>
+<p>(<span class="math inline">\(\Upsilon\)</span> is used in lieu of <span class="math inline">\(\textbf{U}\)</span> to disambiguate between the <span class="math inline">\(\textbf{U}\)</span> matrix in the SVD.) The dynamics are now written:</p>
+<p><span class="math display">\[ \textbf{X}' \approx \begin{bmatrix} \textbf{A} &amp; \textbf{B} \end{bmatrix} \begin{bmatrix} \textbf{X} \\ \Upsilon \end{bmatrix} = \textbf{G} \Omega\]</span></p>
+<p><span class="math inline">\(\textbf{G} = \begin{bmatrix} \textbf{A} &amp; \textbf{B} \end{bmatrix}\)</span> can be isolated using least-squares regression:</p>
+<p><span class="math display">\[\textbf{G} \approx \textbf{X}' \Omega^+\]</span></p>
+<p>The singular value decomposition of <span class="math inline">\(\Omega = \begin{bmatrix} \textbf{X}^* &amp; \Upsilon^* \end{bmatrix}^*\)</span> is taken:</p>
+<p><span class="math display">\[\Omega = \tilde{\textbf{U}} \tilde{\Sigma} \tilde{\textbf{V}}^*\]</span></p>
+<p><span class="math inline">\(\tilde{\textbf{U}}\)</span> is split into two matrices to provide bases for <span class="math inline">\(\textbf{X}\)</span> and <span class="math inline">\(\Upsilon\)</span>:</p>
+<p><span class="math display">\[\tilde{\textbf{U}} = \begin{bmatrix} \tilde{\textbf{U}}_1^* &amp; \tilde{\textbf{U}}_2^* \end{bmatrix}\]</span></p>
+<p>The state matrices <span class="math inline">\(\textbf{A}\)</span> and <span class="math inline">\(\textbf{B}\)</span> can now be constructed:</p>
+<p><span class="math display">\[\textbf{A} = \textbf{X}' \tilde{\textbf{V}} \tilde{\Sigma}^{-1} \tilde{\textbf{U}}_1^*\]</span> <span class="math display">\[\textbf{B} = \textbf{X}' \tilde{\textbf{V}} \tilde{\Sigma}^{-1} \tilde{\textbf{U}}_2^*\]</span></p>
+<p><span class="math inline">\(\tilde{\textbf{U}}\)</span> provides a reduced basis for the input space, whereas <span class="math inline">\(\hat{\textbf{U}}\)</span> from:</p>
+<p><span class="math display">\[\textbf{X}' = \hat{\textbf{U}} \hat{\Sigma} \hat{\textbf{V}}^*\]</span></p>
+<p>provides a reduced basis for the output space. These bases allow us to reduce the order of <span class="math inline">\(\textbf{G}\)</span> by projecting onto this basis:</p>
+<p><span class="math display">\[\tilde{\textbf{G}} = \hat{\textbf{U}}^* \textbf{G} \begin{bmatrix} \hat{\textbf{U}} \\ \textbf{I} \end{bmatrix}\]</span></p>
+<p>and the corresponding projected matrices <span class="math inline">\(\tilde{\textbf{A}}\)</span> and <span class="math inline">\(\tilde{\textbf{B}}\)</span> are:</p>
+<p><span class="math display">\[\tilde{\textbf{A}} = \hat{\textbf{U}}^* \textbf{A}\hat{\textbf{U}}\]</span></p>
+<p><span class="math display">\[\tilde{\textbf{B}} = \hat{\textbf{U}}^* \textbf{B} \]</span></p>
+<p>The key difference from standard DMD is the augmented data matrix <span class="math inline">\(\textbf{G}\)</span>, which incorporates both state and control input data. This allows DMDc to disambiguate the underlying dynamics from the effects of actuation, providing an accurate input-output model represented by the modes <span class="math inline">\(\Phi\)</span> and eigenvalues <span class="math inline">\(\Lambda\)</span>.</p>
+<p><span class="math display">\[\tilde{\textbf{A}} \textbf{W} = \textbf{W} \Lambda\]</span></p>
+<p><span class="math display">\[ \Phi = \textbf{X}' \tilde{\textbf{V}} \tilde{\Sigma}^{-1} \tilde{\textbf{U}}_1^* \hat{\textbf{U}} \textbf{W} \]</span></p>
 
 
 </section>
@@ -565,7 +668,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./ch5.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">System Identification Techniques</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">2024SP Project: Population Dynamics</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

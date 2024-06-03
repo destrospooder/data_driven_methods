@@ -1,5 +1,2 @@
-# System Identification Techniques
+# 2024SP Project: Population Dynamics
 
-## Overview: Eigensystem Realization Algorithm
-
-## Overview: DMD with Control

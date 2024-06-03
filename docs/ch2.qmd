@@ -14,6 +14,11 @@ Proper orthogonal decomposition (POD) modes are a set of orthogonal basis functi
 
 The modes are ranked by their energy content, with the first mode capturing the most energy and subsequent modes capturing progressively less energy.
 
+One last thing- the pseudoinverse can be computed using the singular value decomposition of a matrix. If $\textbf{X} = \textbf{U} \Sigma \textbf{V}^*$ is the SVD of $\textbf{X}$, then the pseudoinverse is given by:
+
+$$\text{X}^+ = \textbf{V} \Sigma^{-1} \textbf{U}^*$$
+
+
 ## POD Analysis of Low Reynolds Number Pitching Airfoil DNS
 
 The [dataset](https://deepblue.lib.umich.edu/data/concern/data_sets/6395w7505?locale=en) analyzed contains direct numerical simulations (DNS) of two-dimensional stationary and pitching flat-plate airfoils at a Reynolds number of 100. The dataset includes time-resolved snapshots of the velocity field, lift and drag coefficients, and airfoil kinematics spanning 40-100 convective time units. The cases consist of a stationary airfoil and eight different pitching frequencies. This dataset is part of a database intended to aid in the conception, training, demonstration, evaluation, and comparison of reduced-complexity models for fluid mechanics, created by Aaron Towne and Scott Dawson.

@@ -155,13 +155,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Model Reduction and Projection</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">System Identification Techniques</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">System Identification Techniques</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">2024SP Project: Population Dynamics</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -213,6 +213,8 @@ ul.task-list li input[type="checkbox"] {
 <p>The SVD is particularly useful for analyzing large, high-dimensional datasets that can be well-approximated by matrices of much lower rank. By extracting the dominant patterms in the data, the SVD enables efficient dimensionality reduction, noise removal, and data compression. It is the foundation of techniques like principal component analysis (PCA) and is widely applied in fields such as signal processing, machine learning, and image analysis.</p>
 <p>Proper orthogonal decomposition (POD) modes are a set of orthogonal basis functions that optimally represent a given dataset in a least-squares sense. They are obtained by performing an SVD on a data matrix. POD modes form an orthonormal basis, meaning the modes are mutually orthogonal and have unit norm.</p>
 <p>The modes are ranked by their energy content, with the first mode capturing the most energy and subsequent modes capturing progressively less energy.</p>
+<p>One last thing- the pseudoinverse can be computed using the singular value decomposition of a matrix. If <span class="math inline">\(\textbf{X} = \textbf{U} \Sigma \textbf{V}^*\)</span> is the SVD of <span class="math inline">\(\textbf{X}\)</span>, then the pseudoinverse is given by:</p>
+<p><span class="math display">\[\text{X}^+ = \textbf{V} \Sigma^{-1} \textbf{U}^*\]</span></p>
 </section>
 <section id="pod-analysis-of-low-reynolds-number-pitching-airfoil-dns" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="pod-analysis-of-low-reynolds-number-pitching-airfoil-dns"><span class="header-section-number">2.2</span> POD Analysis of Low Reynolds Number Pitching Airfoil DNS</h2>
